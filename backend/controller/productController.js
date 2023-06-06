@@ -32,6 +32,7 @@ exports.updateProduct=async(req,res,next)=>{
         })
     }
 
+
     product=await Product.findByIdAndUpdate(req.params.id,req.body,{
         new:true,
         runValidators:true,
@@ -44,3 +45,23 @@ exports.updateProduct=async(req,res,next)=>{
     })
 }
 
+// delte product
+
+exports.deleteProduct=async(req,res,next)=>{
+    const product=await Product.findById(req.params.id);
+    console.log(product)
+      if(!product){
+        res.status(500).json({
+            success:false,
+            message:"product not found"
+        })
+      }
+
+    await product.deleteOne({_id:req.params.id})
+
+      res.status(200).json({
+       success:true,
+        message:"product deleted succesfully"
+      })
+
+}

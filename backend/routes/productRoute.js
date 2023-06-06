@@ -1,5 +1,5 @@
 const express=require('express')
-const { getAllProduct ,createProduct} = require('../controller/productController')
+const { getAllProduct ,createProduct,updateProduct,deleteProduct} = require('../controller/productController')
 
 const router=express.Router()
 
@@ -8,6 +8,8 @@ router.route('/product')
 
 router.route('/product/new').post(createProduct)
 
-router.route('/product/:id',)
+router.route('/product/:id')
+.put(updateProduct)
+.delete(deleteProduct)
 
 module.exports=router
