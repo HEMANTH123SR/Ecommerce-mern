@@ -1,10 +1,13 @@
 const Product=require('../model/productModul')
+const ErrorHandler = require('../utils/errorHandler')
 const EroorHandler=require('../utils/errorHandler')
 
 //create product
 exports.createProduct=async(req,res)=>{
     const product=await Product.create(req.body)
-
+if(!product){
+  return next(new ErrorHandler("data not created pls try again ", 404));
+}
     res.status(201).json({
         success:true,
         product:product
@@ -14,6 +17,9 @@ exports.createProduct=async(req,res)=>{
 // get all products
 exports.getAllProduct=async(req,res)=>{
    const product= await Product.find().sort({name:-1});
+   if(!product){
+    return next(new ErrorHandler("sorry that didnt worked", 404));
+   }
     res.status(200).json({
         success:true,
         product:product
@@ -42,11 +48,9 @@ exports.getProductDetails=async(req,res,next)=>{
 exports.updateProduct=async(req,res,next)=>{
     let product=Product.findById(req.params.id);
     if(!product){
-        return res.status(500).json({
-            success:false,
-            message:"product not found"
-        })
-    }
+        return next(new ErrorHandler("wrong ID from the user",404))
+        }
+    
     product=await Product.findByIdAndUpdate(req.params.id,req.body,{
         new:true,
         runValidators:true,
@@ -58,15 +62,11 @@ exports.updateProduct=async(req,res,next)=>{
         product:product
     })
 }
-
 // delete product
 exports.deleteProduct=async(req,res,next)=>{
     const product=await Product.findById(req.params.id);
       if(!product){
-      return  res.status(500).json({
-            success:false,
-            message:"product not found"
-        })
+      return next(new ErrorHandler("wrong ID from the user", 404));
       }
 
     await product.deleteOne({_id:req.params.id})
