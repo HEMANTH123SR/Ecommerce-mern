@@ -11,6 +11,7 @@ app.use('/api/v1/',product)
 
 
 // middle ware for error
-// app.use(errorMidleWare)
+
+app.use(errorMidleWare)
 
 module.exports = app;
