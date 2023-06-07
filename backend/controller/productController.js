@@ -21,6 +21,26 @@ exports.getAllProduct=async(req,res)=>{
 }
 
 
+// get a product details
+exports.getProductDetails=async(req,res,next)=>{
+   
+  let product =await Product.findById(req.params.id);
+
+  if (!product) {
+    return res.status(500).json({
+      success: false,
+      message: "product not found",
+    });
+  }
+
+      res.status(200).json({
+        success: true,
+        product:product
+      });
+
+}
+
+
 // update the product
 exports.updateProduct=async(req,res,next)=>{
     let product=Product.findById(req.params.id);
@@ -60,3 +80,5 @@ exports.deleteProduct=async(req,res,next)=>{
       })
 
 }
+
+//
